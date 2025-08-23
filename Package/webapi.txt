@@ -1,0 +1,4 @@
+Persistence
+	-Microsoft.EntityFrameworkCore
+	-Microsoft.EntityFrameworkCore.Design
+	-Microsoft.EntityFrameworkCore.SqlServer
