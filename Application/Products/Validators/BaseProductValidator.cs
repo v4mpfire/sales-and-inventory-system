@@ -28,6 +28,6 @@ public class BaseProductValidator <T, TDto> : AbstractValidator<T> where TDto : 
 
         RuleFor(x => selector(x).StockQuantity)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("Price must be zero or greater.");
+            .WithMessage("Stock quantity must be zero or greater.");
     }
 }
