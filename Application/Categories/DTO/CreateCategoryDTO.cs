@@ -1,6 +1,5 @@
 ﻿namespace Application.Categories;
 
-public class CreateCategoryDTO
+public class CreateCategoryDTO : BaseCategoryDTO
 {
-    public required string Name { get; set; }
 }

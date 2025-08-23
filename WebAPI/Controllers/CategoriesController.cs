@@ -11,4 +11,22 @@ public class CategoriesController(IMediator mediator) : BaseApiController
     {
         return HandleResult(await mediator.Send(new CreateCategory.Command { CategoryDTO = request }));
     }
+
+    [HttpPut]
+    public async Task<ActionResult<Unit>> UpdateCategory(UpdateCategoryDTO request)
+    {
+        return HandleResult(await mediator.Send(new UpdateCategory.Command { CategoryDTO = request}));
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<CategoryDTO>> GetCategory(int id)
+    {
+        return HandleResult(await mediator.Send(new GetCategory.Query { CategoryId = id}));
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<CategoryDTO>>> GetCategories()
+    {
+        return HandleResult(await mediator.Send(new GetAllCategories.Query {}));
+    }
 }
