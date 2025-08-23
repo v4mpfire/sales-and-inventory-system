@@ -19,6 +19,7 @@ builder.Services.AddMediatR(x => {
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRespository, ProductRepository>();
 
 var app = builder.Build();
 

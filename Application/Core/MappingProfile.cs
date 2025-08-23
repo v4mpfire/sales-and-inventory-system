@@ -1,4 +1,5 @@
 ﻿using Application.Categories;
+using Application.Products;
 using AutoMapper;
 using Domain.Entities;
 
@@ -11,5 +12,12 @@ public class MappingProfile : Profile
         CreateMap<CreateCategoryDTO, Category>();
         CreateMap<UpdateCategoryDTO, Category>();
         CreateMap<Category, CategoryDTO>();
+
+        CreateMap<CreateProductDTO, Product>();
+        CreateMap<UpdateProductDTO, Product>();
+
+        CreateMap<ProductDTO, Product>();
+        CreateMap<Product, ProductDTO>()
+            .ForMember(d => d.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
     }
 }
