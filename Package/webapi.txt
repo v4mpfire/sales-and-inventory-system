@@ -2,3 +2,6 @@ Persistence
 	-Microsoft.EntityFrameworkCore
 	-Microsoft.EntityFrameworkCore.Design
 	-Microsoft.EntityFrameworkCore.SqlServer
+	-Microsoft.EntityFrameworkCore.Tools
+WebAPI
+	-Microsoft.EntityFrameworkCore.Design
