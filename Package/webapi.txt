@@ -2,6 +2,7 @@ Application
 	-MediatR
 	-AutoMapper
 	-AutoMapper.Extensions.Microsoft.DependencyInjection
+	-FluentValidation.DependencyInjectionExtensions
 Persistence
 	-Microsoft.EntityFrameworkCore
 	-Microsoft.EntityFrameworkCore.Design

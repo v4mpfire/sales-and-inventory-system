@@ -1,6 +1,7 @@
 using Application.Categories;
 using Application.Core;
 using Domain.Entities;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
 using Persistence.Repositories;
@@ -15,8 +16,10 @@ builder.Services.AddDbContext<SalesAndInventoryContext>(options =>
 
 builder.Services.AddMediatR(x => {
     x.RegisterServicesFromAssemblyContaining<CreateCategory.CommandRequestHandler>();
+    x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRespository, ProductRepository>();
