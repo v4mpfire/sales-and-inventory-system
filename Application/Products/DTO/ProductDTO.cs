@@ -2,6 +2,7 @@
 
 public class ProductDTO
 {
+    public int ProductId { get; set; }
     public int CategoryId { get; set; }
     public required string CategoryName { get; set; }
     public string? Barcode { get; set; }

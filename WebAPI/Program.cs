@@ -1,5 +1,6 @@
 using Application.Categories;
 using Application.Core;
+using Application.Products;
 using Domain.Entities;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ builder.Services.AddMediatR(x => {
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCategoryValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateProductValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
