@@ -9,5 +9,15 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Persistence\Persistence.csproj" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Categories\Queries\" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Include="AutoMapper" Version="12.0.0" />
+	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+	  <PackageReference Include="MediatR" Version="13.0.0" />
+	</ItemGroup>
 
 </Project>

@@ -1,5 +1,9 @@
+using Application.Categories;
+using Application.Core;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Contexts;
+using Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SalesAndInventoryContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddMediatR(x => {
+    x.RegisterServicesFromAssemblyContaining<CreateCategory.CommandRequestHandler>();
+});
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 

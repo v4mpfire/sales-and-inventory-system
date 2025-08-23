@@ -1,3 +1,7 @@
+Application
+	-MediatR
+	-AutoMapper
+	-AutoMapper.Extensions.Microsoft.DependencyInjection
 Persistence
 	-Microsoft.EntityFrameworkCore
 	-Microsoft.EntityFrameworkCore.Design
