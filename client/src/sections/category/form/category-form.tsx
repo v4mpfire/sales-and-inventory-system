@@ -39,10 +39,19 @@ export default function CategoryForm({ onCancel, category }: Props) {
       <Divider />
       <TextField name="Name" label="Name" value={name} onChange={handleOnChange} />
       <Box display="flex" justifyContent="end" gap={3}>
-        <Button color="inherit" onClick={onCancel}>
+        <Button
+          color="inherit"
+          onClick={onCancel}
+          disabled={updateCategory.isPending || createCategory.isPending}
+        >
           Cancel
         </Button>
-        <Button color="success" variant="contained" onClick={handleSubmit}>
+        <Button
+          color="success"
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={updateCategory.isPending || createCategory.isPending}
+        >
           Submit
         </Button>
       </Box>

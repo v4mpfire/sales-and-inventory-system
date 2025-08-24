@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, createContext } from 'react';
+import { useState, useContext, useCallback, createContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -42,7 +42,7 @@ export function CategoryView() {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
 
-  const { categories, loadingCategories } = useCategories();
+  const { categories, loadingCategories } = useCategories(true);
 
   if (loadingCategories || !categories) return <Typography>Loading...</Typography>;
 

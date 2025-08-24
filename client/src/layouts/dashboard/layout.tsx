@@ -1,11 +1,15 @@
 import type { Breakpoint } from '@mui/material/styles';
 
 import { merge } from 'es-toolkit';
+import { Observer } from 'mobx-react-lite';
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import { LinearProgress } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+
+import { useStore } from 'src/utils/hooks/useStore';
 
 import { _notifications } from 'src/_mock';
 
@@ -103,6 +107,8 @@ export function DashboardLayout({
 
   const renderMain = () => <MainSection {...slotProps?.main}>{children}</MainSection>;
 
+  const { uiStore } = useStore();
+
   return (
     <LayoutSection
       /** **************************************
@@ -138,6 +144,15 @@ export function DashboardLayout({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
+      <Observer>
+        {() =>
+          uiStore.isLoading ? (
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress />
+            </Box>
+          ) : null
+        }
+      </Observer>
       {renderMain()}
     </LayoutSection>
   );

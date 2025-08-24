@@ -7,6 +7,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from 'react-router';
 import App from './app';
 import { routesSection } from './routes/sections';
 import { ErrorBoundary } from './routes/components';
+import { store, StoreContext } from './utils/stores/store';
 
 // ----------------------------------------------------------------------
 
@@ -28,9 +29,11 @@ const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <StoreContext.Provider value={store}>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </StoreContext.Provider>
   </StrictMode>
 );

@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import agent from '../api/agent';
 
-export const useCategories = () => {
+export const useCategories = (enabled?: boolean) => {
   const querClient = useQueryClient();
 
   const { data: categories, isLoading: loadingCategories } = useQuery({
@@ -11,6 +11,7 @@ export const useCategories = () => {
       const response = await agent.get<Category[]>('/categories');
       return response.data;
     },
+    enabled: !(enabled === undefined) && enabled,
   });
 
   const createCategory = useMutation({
