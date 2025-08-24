@@ -7,3 +7,8 @@ type Product = {
   price: number;
   stockQuantity: number;
 };
+
+type Category = {
+  categoryId: number;
+  name: string;
+};
