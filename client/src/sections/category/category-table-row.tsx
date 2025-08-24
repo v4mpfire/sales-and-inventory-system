@@ -30,10 +30,12 @@ export function CategoryTableRow({ row, selected, onSelectRow }: CategoryTableRo
 
   const handleClosePopover = useCallback(() => {
     setOpenPopover(null);
-    if (row?.categoryId !== undefined) {
-      handleSelectCategory(row.categoryId);
-    }
-  }, [row, handleSelectCategory]);
+  }, []);
+
+  const handleUpdate = useCallback(() => {
+    handleClosePopover();
+    handleSelectCategory(row.categoryId);
+  }, [handleClosePopover, handleSelectCategory, row.categoryId]);
 
   return (
     <>
@@ -75,7 +77,7 @@ export function CategoryTableRow({ row, selected, onSelectRow }: CategoryTableRo
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem onClick={handleUpdate}>
             <Iconify icon="solar:pen-bold" />
             Edit
           </MenuItem>

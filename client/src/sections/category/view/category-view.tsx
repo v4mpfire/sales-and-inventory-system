@@ -12,12 +12,13 @@ import TablePagination from '@mui/material/TablePagination';
 import { useCategories } from 'src/utils/hooks/useCategories';
 
 import { DashboardContent } from 'src/layouts/dashboard';
+import { TableNoData } from 'src/shared/components/table-no-data';
 import TransitionsModal from 'src/shared/components/transition-modal';
+import { TableLoadingData } from 'src/shared/components/table-loading-data';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-import { TableNoData } from 'src/sections/user/table-no-data';
 import { TableEmptyRows } from 'src/sections/user/table-empty-rows';
 
 import CategoryForm from '../form/category-form';
@@ -25,7 +26,6 @@ import { CategoryTableRow } from '../category-table-row';
 import { CategoryTableHead } from '../category-table-head';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import { CategoryTableToolbar } from '../category-table-toolbar';
-// import { emptyRows, applyFilter, getComparator } from 'src/sections/category/utils';
 
 // ----------------------------------------------------------------------
 
@@ -44,10 +44,10 @@ export function CategoryView() {
 
   const { categories, loadingCategories } = useCategories(true);
 
-  if (loadingCategories || !categories) return <Typography>Loading...</Typography>;
+  const safeCategories = categories ?? [];
 
   const dataFiltered: Category[] | undefined = applyFilter({
-    inputData: categories!,
+    inputData: safeCategories,
     comparator: getComparator(table.order, table.orderBy),
     filterName,
   });
@@ -55,7 +55,7 @@ export function CategoryView() {
   const notFound = !dataFiltered.length && !!filterName;
 
   const handleSelectCategory = (id: number) => {
-    setSelectedCategory(categories.find((x) => x.categoryId === id));
+    setSelectedCategory(safeCategories.find((x) => x.categoryId === id));
     setOpen(true);
   };
 
@@ -111,13 +111,13 @@ export function CategoryView() {
                 <CategoryTableHead
                   order={table.order}
                   orderBy={table.orderBy}
-                  rowCount={categories.length}
+                  rowCount={safeCategories.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      categories.map((category) => category.categoryId)
+                      safeCategories.map((category) => category.categoryId)
                     )
                   }
                   headLabel={[
@@ -143,9 +143,9 @@ export function CategoryView() {
 
                   <TableEmptyRows
                     height={68}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, categories.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, safeCategories.length)}
                   />
-
+                  {loadingCategories && <TableLoadingData textContent="Loading category..." />}
                   {notFound && <TableNoData searchQuery={filterName} />}
                 </TableBody>
               </Table>
@@ -155,7 +155,7 @@ export function CategoryView() {
           <TablePagination
             component="div"
             page={table.page}
-            count={categories.length}
+            count={safeCategories.length}
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
             rowsPerPageOptions={[5, 10, 25]}
