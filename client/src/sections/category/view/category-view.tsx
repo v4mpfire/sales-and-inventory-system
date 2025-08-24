@@ -145,7 +145,7 @@ export function CategoryView() {
                     height={68}
                     emptyRows={emptyRows(table.page, table.rowsPerPage, safeCategories.length)}
                   />
-                  {loadingCategories && <TableLoadingData textContent="Loading category..." />}
+                  {loadingCategories && <TableLoadingData textContent="Loading categories..." />}
                   {notFound && <TableNoData searchQuery={filterName} />}
                 </TableBody>
               </Table>

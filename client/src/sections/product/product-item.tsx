@@ -7,25 +7,20 @@ import Typography from '@mui/material/Typography';
 import { fCurrency } from 'src/utils/format-number';
 
 import { Label } from 'src/components/label';
-import { ColorPreview } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
-export type ProductItemProps = {
-  id: string;
-  name: string;
-  price: number;
-  status: string;
-  coverUrl: string;
-  colors: string[];
-  priceSale: number | null;
+export type Props = {
+  product: Product;
 };
 
-export function ProductItem({ product }: { product: ProductItemProps }) {
+export function ProductItem({ product }: Props) {
+  const status = product.productId % 2 ? 'sale' : 'new';
+
   const renderStatus = (
     <Label
       variant="inverted"
-      color={(product.status === 'sale' && 'error') || 'info'}
+      color={(status === 'sale' && 'error') || 'info'}
       sx={{
         zIndex: 9,
         top: 16,
@@ -34,7 +29,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
         textTransform: 'uppercase',
       }}
     >
-      {product.status}
+      {status}
     </Label>
   );
 
@@ -42,7 +37,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
     <Box
       component="img"
       alt={product.name}
-      src={product.coverUrl}
+      src={product.imageUrl}
       sx={{
         top: 0,
         width: 1,
@@ -53,27 +48,12 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
     />
   );
 
-  const renderPrice = (
-    <Typography variant="subtitle1">
-      <Typography
-        component="span"
-        variant="body1"
-        sx={{
-          color: 'text.disabled',
-          textDecoration: 'line-through',
-        }}
-      >
-        {product.priceSale && fCurrency(product.priceSale)}
-      </Typography>
-      &nbsp;
-      {fCurrency(product.price)}
-    </Typography>
-  );
+  const renderPrice = <Typography variant="subtitle1">{fCurrency(product.price)}</Typography>;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {product.status && renderStatus}
+        {status && renderStatus}
         {renderImg}
       </Box>
 
@@ -89,7 +69,6 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
             justifyContent: 'space-between',
           }}
         >
-          <ColorPreview colors={product.colors} />
           {renderPrice}
         </Box>
       </Stack>

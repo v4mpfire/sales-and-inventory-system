@@ -9,6 +9,11 @@ export const useProducts = () => {
       const response = await agent.get<Product[]>('/products');
       return response.data;
     },
+    select: (data) =>
+      data.map((prod) => ({
+        ...prod,
+        imageUrl: `/assets/images/product/product-${prod.productId}.webp`,
+      })),
   });
 
   return { products, productLoading };

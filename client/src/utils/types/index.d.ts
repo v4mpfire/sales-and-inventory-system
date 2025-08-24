@@ -6,6 +6,7 @@ type Product = {
   name: string;
   price: number;
   stockQuantity: number;
+  imageUrl?: string;
 };
 
 type Category = {

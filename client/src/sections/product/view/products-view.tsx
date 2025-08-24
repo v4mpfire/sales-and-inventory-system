@@ -5,8 +5,11 @@ import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 
+import { useProducts } from 'src/utils/hooks/useProducts';
+
 import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
+import LoadingSpinner from 'src/shared/components/loading-spinner';
 
 import { ProductItem } from '../product-item';
 import { ProductSort } from '../product-sort';
@@ -64,6 +67,8 @@ export function ProductsView() {
 
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
 
+  const { products, productLoading } = useProducts();
+
   const handleOpenFilter = useCallback(() => {
     setOpenFilter(true);
   }, []);
@@ -86,67 +91,83 @@ export function ProductsView() {
 
   return (
     <DashboardContent>
-      <CartIcon totalItems={8} />
+      {!productLoading && <CartIcon totalItems={8} />}
 
       <Typography variant="h4" sx={{ mb: 5 }}>
         Products
       </Typography>
-      <Box
-        sx={{
-          mb: 5,
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap-reverse',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <Box
-          sx={{
-            my: 1,
-            gap: 1,
-            flexShrink: 0,
-            display: 'flex',
-          }}
-        >
-          <ProductFilters
-            canReset={canReset}
-            filters={filters}
-            onSetFilters={handleSetFilters}
-            openFilter={openFilter}
-            onOpenFilter={handleOpenFilter}
-            onCloseFilter={handleCloseFilter}
-            onResetFilter={() => setFilters(defaultFilters)}
-            options={{
-              genders: GENDER_OPTIONS,
-              categories: CATEGORY_OPTIONS,
-              ratings: RATING_OPTIONS,
-              price: PRICE_OPTIONS,
-              colors: COLOR_OPTIONS,
+      {productLoading ? (
+        <LoadingSpinner textContent="Loading products..." />
+      ) : (
+        <>
+          <Box
+            sx={{
+              mb: 3,
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap-reverse',
+              justifyContent: 'flex-end',
             }}
-          />
+          >
+            <Box
+              sx={{
+                my: 1,
+                gap: 1,
+                flexShrink: 0,
+                display: 'flex',
+              }}
+            >
+              <ProductFilters
+                canReset={canReset}
+                filters={filters}
+                onSetFilters={handleSetFilters}
+                openFilter={openFilter}
+                onOpenFilter={handleOpenFilter}
+                onCloseFilter={handleCloseFilter}
+                onResetFilter={() => setFilters(defaultFilters)}
+                options={{
+                  genders: GENDER_OPTIONS,
+                  categories: CATEGORY_OPTIONS,
+                  ratings: RATING_OPTIONS,
+                  price: PRICE_OPTIONS,
+                  colors: COLOR_OPTIONS,
+                }}
+              />
 
-          <ProductSort
-            sortBy={sortBy}
-            onSort={handleSort}
-            options={[
-              { value: 'featured', label: 'Featured' },
-              { value: 'newest', label: 'Newest' },
-              { value: 'priceDesc', label: 'Price: High-Low' },
-              { value: 'priceAsc', label: 'Price: Low-High' },
-            ]}
-          />
-        </Box>
-      </Box>
+              <ProductSort
+                sortBy={sortBy}
+                onSort={handleSort}
+                options={[
+                  { value: 'featured', label: 'Featured' },
+                  { value: 'newest', label: 'Newest' },
+                  { value: 'priceDesc', label: 'Price: High-Low' },
+                  { value: 'priceAsc', label: 'Price: Low-High' },
+                ]}
+              />
+            </Box>
+          </Box>
 
-      <Grid container spacing={3}>
-        {_products.map((product) => (
-          <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
-            <ProductItem product={product} />
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              justifyContent: {
+                xs: 'center',
+                sm: 'flex-start',
+              },
+              alignItems: 'center',
+            }}
+          >
+            {products?.map((product) => (
+              <Grid key={product.productId} size={{ xs: 8, sm: 4, md: 2 }}>
+                <ProductItem product={product} />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
 
-      <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />
+          <Pagination count={1} color="primary" sx={{ mt: 8, mx: 'auto' }} />
+        </>
+      )}
     </DashboardContent>
   );
 }
