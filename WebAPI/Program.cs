@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<SalesAndInventoryContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
@@ -36,6 +37,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors(x =>
+    x.AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:3039"));
 
 app.UseAuthorization();
 
