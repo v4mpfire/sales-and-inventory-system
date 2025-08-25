@@ -69,7 +69,7 @@ export function ProductsView() {
 
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
 
-  const { products, productLoading } = useProducts();
+  const { products, productsLoading } = useProducts();
 
   const handleOpenFilter = useCallback(() => {
     setOpenFilter(true);
@@ -94,7 +94,8 @@ export function ProductsView() {
   return (
     <DashboardContent>
       <Typography variant="h4">Products</Typography>
-      {productLoading ? (
+
+      {productsLoading ? (
         <LoadingSpinner textContent="Loading products..." />
       ) : (
         <>
@@ -104,10 +105,9 @@ export function ProductsView() {
               display: 'flex',
               alignItems: 'center',
               flexWrap: 'wrap',
-              justifyContent: 'space-between', // ✅ separates start and end items
+              justifyContent: 'space-between',
             }}
           >
-            {/* New Product button on the left */}
             <Box sx={{ my: 1 }}>
               <Button
                 color="success"

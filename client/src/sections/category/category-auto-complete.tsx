@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   useController,
   useFormContext,
@@ -6,11 +6,12 @@ import {
   type UseControllerProps,
 } from 'react-hook-form';
 
-import { TextField, Typography, Autocomplete } from '@mui/material';
+import { TextField, Autocomplete } from '@mui/material';
 
-import { useCategories } from 'src/utils/hooks/useCategories';
-
-type Props<T extends FieldValues> = { label: string } & UseControllerProps<T>;
+type Props<T extends FieldValues> = {
+  label: string;
+  categories: Category[];
+} & UseControllerProps<T>;
 
 export default function CategoryAutoComplete<T extends FieldValues>(props: Props<T>) {
   const { field } = useController({ ...props });
@@ -19,21 +20,18 @@ export default function CategoryAutoComplete<T extends FieldValues>(props: Props
   const [touched, setTouched] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
-  const { categories, loadingCategories } = useCategories(true);
-
   useEffect(() => {
     if (field.value && typeof field.value === 'object') {
       setName(field.value.name || '');
+      setSelectedCategory(field.value);
     } else {
       setName(field.value || '');
     }
   }, [field.value]);
 
-  if (loadingCategories || !categories) return <Typography>Loading...</Typography>;
-
   return (
     <Autocomplete
-      options={categories}
+      options={props.categories}
       getOptionLabel={(option) => option.name}
       value={selectedCategory}
       onChange={(_, newValue) => {

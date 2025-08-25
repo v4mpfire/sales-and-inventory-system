@@ -1,20 +1,22 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import { Box, Card, Grid, Button, Typography } from '@mui/material';
 
 import { useProducts } from 'src/utils/hooks/useProducts';
+import { useCategories } from 'src/utils/hooks/useCategories';
 import { productSchema, type ProductSchema } from 'src/utils/schemas/productSchema';
 
 import TextInput from 'src/shared/components/text-input';
+import SplashScreen from 'src/shared/components/splash-screen';
 
 import CategoryAutoComplete from 'src/sections/category/category-auto-complete';
 
-type Props = {
-  modifyProduct?: Product;
-};
-export default function ProductForm({ modifyProduct }: Props) {
+export default function ProductForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const methods = useForm<ProductSchema>({
     mode: 'onTouched',
     resolver: zodResolver(productSchema),
@@ -27,12 +29,19 @@ export default function ProductForm({ modifyProduct }: Props) {
     },
   });
 
-  const { createProduct } = useProducts();
+  const {
+    product: modifyProduct,
+    productLoading,
+    createProduct,
+    updateProduct,
+  } = useProducts(Number(id));
+  const { categories, loadingCategories } = useCategories(true);
 
   useEffect(() => {
     if (modifyProduct) {
       methods.reset({
         ...modifyProduct,
+        barcode: modifyProduct.barcode === null ? '' : modifyProduct.barcode,
         price: modifyProduct.price.toString(),
         stockQuantity: modifyProduct.stockQuantity.toString(),
         category: {
@@ -44,7 +53,7 @@ export default function ProductForm({ modifyProduct }: Props) {
   }, [modifyProduct, methods]);
 
   const onSubmit = async (data: ProductSchema) => {
-    const product: Product = {
+    const request: Product = {
       productId: modifyProduct?.productId ?? 0,
       name: data.name,
       barcode: data?.barcode,
@@ -54,11 +63,25 @@ export default function ProductForm({ modifyProduct }: Props) {
       categoryName: data.category.name,
     };
 
-    await createProduct.mutateAsync(product);
+    if (modifyProduct) {
+      await updateProduct.mutateAsync(request, {
+        onSuccess: () => {
+          navigate('/products');
+        },
+      });
+    } else {
+      await createProduct.mutateAsync(request, {
+        onSuccess: () => {
+          navigate('/products');
+        },
+      });
+    }
   };
 
+  if (productLoading || loadingCategories) return <SplashScreen />;
+
   return (
-    <Grid justifyContent="center" sx={{ maxWidth: '100%' }}>
+    <Grid justifyContent="center" sx={{ maxWidth: '100%', my: 2 }}>
       <Grid
         sx={{
           maxWidth: {
@@ -70,8 +93,13 @@ export default function ProductForm({ modifyProduct }: Props) {
         }}
       >
         <Card sx={{ borderRadius: 1, padding: 3, mx: 4 }}>
-          <Typography variant="h5" gutterBottom color="success" marginBottom={2}>
-            New Product
+          <Typography
+            variant="h5"
+            gutterBottom
+            color={modifyProduct ? 'info' : 'success'}
+            marginBottom={2}
+          >
+            {modifyProduct ? 'Edit Product' : 'New Product'}
           </Typography>
           <FormProvider {...methods}>
             <Box
@@ -86,6 +114,7 @@ export default function ProductForm({ modifyProduct }: Props) {
                 control={methods.control}
                 name="category"
                 label="Select Category"
+                categories={categories!}
               />
               <TextInput name="name" label="Name" control={methods.control} />
               <TextInput name="barcode" label="Barcode" control={methods.control} />
@@ -97,9 +126,11 @@ export default function ProductForm({ modifyProduct }: Props) {
                 control={methods.control}
               />
               <Box display="flex" justifyContent="end" gap={3}>
-                <Button color="inherit">Cancel</Button>
+                <Button color="inherit" component={Link} to="/products">
+                  Cancel
+                </Button>
                 <Button
-                  color="success"
+                  color={modifyProduct ? 'info' : 'success'}
                   variant="contained"
                   type="submit"
                   disabled={createProduct.isPending}
