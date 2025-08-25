@@ -14,13 +14,22 @@ export type Props = {
   product: Product;
 };
 
+const STOCKS_FLOORING = 10;
+
 export function ProductItem({ product }: Props) {
-  const status = product.productId % 2 ? 'sale' : 'new';
+  // product.imageUrl =
+  //   'https://res.cloudinary.com/dkjpuhbdi/image/upload/v1756048338/Reactivities/zfybszf7ve5vhptcvm88.png';
+  const status =
+    product.stockQuantity === 0
+      ? 'Out of stocks'
+      : product.stockQuantity > 0 && product.stockQuantity >= STOCKS_FLOORING
+        ? 'Low inventory'
+        : 'Good';
 
   const renderStatus = (
     <Label
       variant="inverted"
-      color={(status === 'sale' && 'error') || 'info'}
+      color={(status === 'Out of stocks' && 'error') || 'info'}
       sx={{
         zIndex: 9,
         top: 16,

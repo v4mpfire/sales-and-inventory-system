@@ -1,19 +1,21 @@
+import { Link } from 'react-router';
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import { Button } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 
 import { useProducts } from 'src/utils/hooks/useProducts';
 
-import { _products } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 import LoadingSpinner from 'src/shared/components/loading-spinner';
 
+import { Iconify } from 'src/components/iconify';
+
 import { ProductItem } from '../product-item';
 import { ProductSort } from '../product-sort';
-import { CartIcon } from '../product-cart-widget';
 import { ProductFilters } from '../product-filters';
 
 import type { FiltersProps } from '../product-filters';
@@ -91,11 +93,7 @@ export function ProductsView() {
 
   return (
     <DashboardContent>
-      {!productLoading && <CartIcon totalItems={8} />}
-
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Products
-      </Typography>
+      <Typography variant="h4">Products</Typography>
       {productLoading ? (
         <LoadingSpinner textContent="Loading products..." />
       ) : (
@@ -105,16 +103,31 @@ export function ProductsView() {
               mb: 3,
               display: 'flex',
               alignItems: 'center',
-              flexWrap: 'wrap-reverse',
-              justifyContent: 'flex-end',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between', // ✅ separates start and end items
             }}
           >
+            {/* New Product button on the left */}
+            <Box sx={{ my: 1 }}>
+              <Button
+                color="success"
+                component={Link}
+                to="/products/new"
+                startIcon={<Iconify icon="mingcute:add-line" />}
+              >
+                New Product
+              </Button>
+            </Box>
+
+            {/* Filters and Sort on the right */}
             <Box
               sx={{
                 my: 1,
                 gap: 1,
-                flexShrink: 0,
                 display: 'flex',
+                flexShrink: 0,
+                flexWrap: 'wrap',
+                justifyContent: 'flex-end',
               }}
             >
               <ProductFilters

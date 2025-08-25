@@ -4,3 +4,4 @@ npm i @tanstack/react-query-devtools
 npm install --save mobx
 npm i @hookform/resolvers
 npm install react-hook-form
+npm install zod@^3.20.0

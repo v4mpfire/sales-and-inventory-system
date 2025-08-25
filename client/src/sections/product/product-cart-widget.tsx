@@ -10,14 +10,14 @@ import { Iconify } from 'src/components/iconify';
 // ----------------------------------------------------------------------
 
 type CartIconProps = BoxProps & {
-  totalItems: number;
+  textContent: string;
 };
 
-export function CartIcon({ totalItems, sx, ...other }: CartIconProps) {
+export function CartIcon({ textContent, sx, ...other }: CartIconProps) {
   return (
     <Box
       component={RouterLink}
-      href="#"
+      href="/products/new"
       sx={[
         (theme) => ({
           right: 0,
@@ -39,7 +39,7 @@ export function CartIcon({ totalItems, sx, ...other }: CartIconProps) {
       ]}
       {...other}
     >
-      <Badge showZero badgeContent={totalItems} color="error" max={99}>
+      <Badge showZero badgeContent={textContent} color="error" max={99}>
         <Iconify icon="solar:cart-3-bold" width={24} />
       </Badge>
     </Box>

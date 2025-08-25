@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import agent from '../api/agent';
 
@@ -16,5 +16,11 @@ export const useProducts = () => {
       })),
   });
 
-  return { products, productLoading };
+  const createProduct = useMutation({
+    mutationFn: async (product: Product) => {
+      await agent.post('/products', product);
+    },
+  });
+
+  return { products, productLoading, createProduct };
 };
