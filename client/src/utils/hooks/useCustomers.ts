@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import agent from '../api/agent';
 
-export const useCustomers = () => {
+export const useCustomers = (enable?: boolean) => {
   const queryClient = useQueryClient();
 
   const { data: customers, isLoading: loadingCustomers } = useQuery({
@@ -11,6 +11,7 @@ export const useCustomers = () => {
       const response = await agent.get<Customer[]>('/customers');
       return response.data;
     },
+    enabled: enable !== undefined && enable,
   });
 
   const createCustomer = useMutation({

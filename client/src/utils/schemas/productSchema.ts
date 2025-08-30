@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-const requiredString = (field: string) =>
-  z.string({ required_error: `${field} is required` }).min(1, { message: `${field} is required` });
+import { requiredString } from '../helpers';
 
 export const productSchema = z.object({
   name: requiredString('Name'),

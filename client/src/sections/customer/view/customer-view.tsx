@@ -42,7 +42,7 @@ export function CustomerView() {
   const [open, setOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | undefined>(undefined);
 
-  const { customers, loadingCustomers } = useCustomers();
+  const { customers, loadingCustomers } = useCustomers(true);
 
   const safeCustomers = customers ?? [];
 

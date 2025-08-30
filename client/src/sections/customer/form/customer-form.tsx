@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Box, Button, Divider, TextField } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 
 import { useCustomers } from 'src/utils/hooks/useCustomers';
+import { customerSchema, type CustomerSchema } from 'src/utils/schemas/customerSchema';
+
+import TextInput from 'src/shared/components/text-input';
 
 type Props = {
   onCancel: () => void;
@@ -11,37 +16,43 @@ type Props = {
 
 export default function CustomerForm({ onCancel, customer }: Props) {
   const { createCustomer, updateCustomer } = useCustomers();
-  const [name, setName] = useState(customer?.name ?? '');
-  const [email, setEmail] = useState(customer?.email ?? '');
+  const { reset, handleSubmit, control } = useForm<CustomerSchema>({
+    mode: 'onTouched',
+    resolver: zodResolver(customerSchema),
+  });
 
-  const handleSubmit = async () => {
-    const cus: Customer = {
+  useEffect(() => {
+    if (customer) {
+      reset({ ...customer });
+    }
+  }, [customer, reset]);
+
+  const onSubmit = async (data: CustomerSchema) => {
+    const request: Customer = {
+      ...data,
       customerId: customer?.customerId ?? 0,
-      name,
-      email,
     };
 
-    console.log(cus);
-
     if (customer) {
-      await updateCustomer.mutateAsync(cus);
+      await updateCustomer.mutateAsync(request);
     } else {
-      await createCustomer.mutateAsync(cus);
+      await createCustomer.mutateAsync(request);
     }
 
     onCancel();
   };
 
   return (
-    <Box component="form" display="flex" flexDirection="column" gap={3}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      display="flex"
+      flexDirection="column"
+      gap={3}
+    >
       <Divider />
-      <TextField name="Name" label="Name" value={name} onChange={(e) => setName(e.target.value)} />
-      <TextField
-        name="Email"
-        label="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <TextInput name="name" label="Name" control={control} />
+      <TextInput name="email" label="Email" control={control} />
       <Box display="flex" justifyContent="end" gap={3}>
         <Button
           color="inherit"
@@ -53,7 +64,7 @@ export default function CustomerForm({ onCancel, customer }: Props) {
         <Button
           color="success"
           variant="contained"
-          onClick={handleSubmit}
+          type="submit"
           disabled={updateCustomer.isPending || createCustomer.isPending}
         >
           Submit

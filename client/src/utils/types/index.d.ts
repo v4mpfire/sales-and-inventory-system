@@ -17,5 +17,5 @@ type Category = {
 type Customer = {
   customerId: number;
   name: string;
-  email: string;
+  email?: string;
 };
