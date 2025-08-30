@@ -1,10 +1,15 @@
-import type { ChangeEvent } from 'react';
+import type { CategorySchema } from 'src/utils/schemas/categorySchema';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Box, Button, Divider, TextField } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 
 import { useCategories } from 'src/utils/hooks/useCategories';
+import { categorySchena } from 'src/utils/schemas/categorySchema';
+
+import TextInput from 'src/shared/components/text-input';
 
 type Props = {
   onCancel: () => void;
@@ -13,31 +18,44 @@ type Props = {
 
 export default function CategoryForm({ onCancel, category }: Props) {
   const { createCategory, updateCategory } = useCategories();
-  const [name, setName] = useState(category?.name ?? '');
+  const { reset, handleSubmit, control } = useForm<CategorySchema>({
+    mode: 'onTouched',
+    resolver: zodResolver(categorySchena),
+  });
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
+  useEffect(() => {
+    if (category) {
+      reset({
+        ...category,
+      });
+    }
+  }, [category, reset]);
 
-  const handleSubmit = async () => {
-    const cat: Category = {
+  const onSubmit = async (data: CategorySchema) => {
+    const request: Category = {
+      ...data,
       categoryId: category?.categoryId ?? 0,
-      name,
     };
 
     if (category) {
-      await updateCategory.mutateAsync(cat);
+      await updateCategory.mutateAsync(request);
     } else {
-      await createCategory.mutateAsync(cat);
+      await createCategory.mutateAsync(request);
     }
 
     onCancel();
   };
 
   return (
-    <Box component="form" display="flex" flexDirection="column" gap={3}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+      display="flex"
+      flexDirection="column"
+      gap={3}
+    >
       <Divider />
-      <TextField name="Name" label="Name" value={name} onChange={handleOnChange} />
+      <TextInput name="name" label="Name" control={control} />
       <Box display="flex" justifyContent="end" gap={3}>
         <Button
           color="inherit"
@@ -49,7 +67,7 @@ export default function CategoryForm({ onCancel, category }: Props) {
         <Button
           color="success"
           variant="contained"
-          onClick={handleSubmit}
+          type="submit"
           disabled={updateCategory.isPending || createCategory.isPending}
         >
           Submit
