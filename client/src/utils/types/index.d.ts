@@ -13,3 +13,9 @@ type Category = {
   categoryId: number;
   name: string;
 };
+
+type Customer = {
+  customerId: number;
+  name: string;
+  email: string;
+};

@@ -12,6 +12,7 @@ import SplashScreen from 'src/shared/components/splash-screen';
 export const DashboardPage = lazy(() => import('src/pages/dashboard'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
+export const CustomerPage = lazy(() => import('src/pages/customers'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const CategoriesPage = lazy(() => import('src/pages/categories'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
@@ -36,6 +37,7 @@ export const routesSection: RouteObject[] = [
       { path: 'products', element: <ProductsPage /> },
       { path: 'products/new', element: <ProductsFormPage key="new" /> },
       { path: 'products/:id', element: <ProductsFormPage /> },
+      { path: 'customers', element: <CustomerPage /> },
       { path: 'blog', element: <BlogPage /> },
     ],
   },
