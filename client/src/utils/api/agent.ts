@@ -7,6 +7,7 @@ const sleep = (delay: number): Promise<void> =>
 
 const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
 
 agent.interceptors.request.use((config) => {
