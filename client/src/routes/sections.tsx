@@ -7,6 +7,8 @@ import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
 import SplashScreen from 'src/shared/components/splash-screen';
 
+import RequiredAuth from './components/required-auth';
+
 // ----------------------------------------------------------------------
 
 export const DashboardPage = lazy(() => import('src/pages/dashboard'));
@@ -31,18 +33,23 @@ export const routesSection: RouteObject[] = [
       </DashboardLayout>
     ),
     children: [
-      { index: true, element: <DashboardPage /> },
-      { path: 'user', element: <UserPage /> },
-      { path: 'categories', element: <CategoriesPage /> },
-      { path: 'products', element: <ProductsPage /> },
-      { path: 'products/new', element: <ProductsFormPage key="new" /> },
-      { path: 'products/:id', element: <ProductsFormPage /> },
-      { path: 'customers', element: <CustomerPage /> },
-      { path: 'blog', element: <BlogPage /> },
+      {
+        element: <RequiredAuth />,
+        children: [
+          { index: true, element: <DashboardPage /> },
+          { path: 'user', element: <UserPage /> },
+          { path: 'categories', element: <CategoriesPage /> },
+          { path: 'products', element: <ProductsPage /> },
+          { path: 'products/new', element: <ProductsFormPage key="new" /> },
+          { path: 'products/:id', element: <ProductsFormPage /> },
+          { path: 'customers', element: <CustomerPage /> },
+          { path: 'blog', element: <BlogPage /> },
+        ],
+      },
     ],
   },
   {
-    path: 'sign-in',
+    path: 'login',
     element: (
       <AuthLayout>
         <SignInPage />

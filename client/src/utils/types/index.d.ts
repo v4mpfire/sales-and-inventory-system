@@ -19,3 +19,9 @@ type Customer = {
   name: string;
   email?: string;
 };
+
+type UserSession = {
+  id: string;
+  email: string;
+  displayName?: string;
+};

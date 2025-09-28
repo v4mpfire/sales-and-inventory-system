@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import agent from '../api/agent';
 
@@ -30,9 +30,18 @@ export const useAccount = () => {
       queryClient.removeQueries({ queryKey: ['products'] });
       queryClient.removeQueries({ queryKey: ['user'] });
 
-      navigate('/sign-in');
+      navigate('/login');
     },
   });
 
-  return { loginUser, logoutUser };
+  const { data: userSession, isLoading: loadingUserSession } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const response = await agent.get<UserSession>('/accounts/session');
+      return response.data;
+    },
+    enabled: !queryClient.getQueryData(['user']),
+  });
+
+  return { loginUser, logoutUser, userSession, loadingUserSession };
 };
