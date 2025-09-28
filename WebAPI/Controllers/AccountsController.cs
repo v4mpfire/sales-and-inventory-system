@@ -16,10 +16,16 @@ public class AccountsController(IMediator mediator, SignInManager<User> signInMa
         return HandleResult(await mediator.Send(new RegisterUser.Command { RegisterDTO = request }));
     }
 
+    [HttpGet("session")]
+    public async Task<ActionResult<UserInfoDTO>> GetUserInfo()
+    {
+        return HandleResult(await mediator.Send(new GetUserSession.Query()));
+    }
+
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
     {
         await signInManager.SignOutAsync();
-        return Ok();
+        return NoContent();
     }
 }

@@ -1,14 +1,15 @@
 using Application.Categories;
 using Application.Core;
 using Application.Customers;
+using Application.Interfaces;
 using Application.Products;
 using Domain.Entities;
 using FluentValidation;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 using Persistence.Contexts;
 using Persistence.Repositories;
 using WebAPI.BuilderHelpers;
@@ -46,6 +47,7 @@ builder.Services.AddIdentityApiEndpoints<User>(option =>
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRespository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 var app = builder.Build();
 

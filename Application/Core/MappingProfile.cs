@@ -1,4 +1,5 @@
-﻿using Application.Categories;
+﻿using Application.Accounts;
+using Application.Categories;
 using Application.Customers;
 using Application.Products;
 using AutoMapper;
@@ -24,5 +25,7 @@ public class MappingProfile : Profile
         CreateMap<CreateCustomerDTO, Customer>();
         CreateMap<UpdateCustomerDTO, Customer>();
         CreateMap<Customer, CustomerDTO>();
+
+        CreateMap<User, UserInfoDTO>();
     }
 }
