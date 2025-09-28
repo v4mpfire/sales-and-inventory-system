@@ -37,7 +37,7 @@ export const routesSection: RouteObject[] = [
         element: <RequiredAuth />,
         children: [
           { index: true, element: <DashboardPage /> },
-          { path: 'user', element: <UserPage /> },
+          { path: 'users', element: <UserPage /> },
           { path: 'categories', element: <CategoriesPage /> },
           { path: 'products', element: <ProductsPage /> },
           { path: 'products/new', element: <ProductsFormPage key="new" /> },
