@@ -8,5 +8,8 @@ Persistence
 	-Microsoft.EntityFrameworkCore.Design
 	-Microsoft.EntityFrameworkCore.SqlServer
 	-Microsoft.EntityFrameworkCore.Tools
+Domain
+	-Microsoft.AspNetCore.Identity.EntityFrameworkCore
+
 WebAPI
 	-Microsoft.EntityFrameworkCore.Design

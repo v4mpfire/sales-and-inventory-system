@@ -1,20 +1,16 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Contexts;
 
-public class SalesAndInventoryContext : DbContext
+public class SalesAndInventoryContext(DbContextOptions options) : IdentityDbContext<User>(options)
 {
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Sale> Sales { get; set; }
     public DbSet<SaleItem> SaleItems { get; set; }
-
-    public SalesAndInventoryContext(DbContextOptions<SalesAndInventoryContext> options)
-        : base(options)
-    {
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
