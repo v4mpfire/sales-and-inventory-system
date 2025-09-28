@@ -13,6 +13,10 @@ public class ExceptionMiddleware (IHostEnvironment environment) : IMiddleware
 		{
 			await next(context);
 		}
+		catch (IdentityExceptions ex)
+		{
+			await HandleIdentityException(context, ex);
+		}
 		catch (ValidationException ex)
 		{
 			await HandleValidationException(context, ex);
@@ -21,6 +25,37 @@ public class ExceptionMiddleware (IHostEnvironment environment) : IMiddleware
 		{
 			await HandleExceptions(context, ex);
 		}
+    }
+    private static async Task HandleIdentityException(HttpContext context, IdentityExceptions ex)
+    {
+        var validationErrors = new Dictionary<string, string[]>();
+
+        if (ex.Errors is not null)
+        {
+            foreach (var error in ex.Errors)
+            {
+                if (validationErrors.TryGetValue(error.Code, out var existingErrors))
+                {
+                    validationErrors[error.Code] = existingErrors.Append(error.Description).ToArray();
+                }
+                else
+                {
+                    validationErrors[error.Code] = [error.Description];
+                }
+            }
+        }
+
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+        var validationProblemDetails = new ValidationProblemDetails(validationErrors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = ex.Type,
+            Title = "Validation error",
+            Detail = ex.Message
+        };
+
+        await context.Response.WriteAsJsonAsync(validationProblemDetails);
     }
 
     public static async Task HandleValidationException(HttpContext context, ValidationException ex)

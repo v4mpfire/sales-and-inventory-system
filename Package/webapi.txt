@@ -10,6 +10,7 @@ Persistence
 	-Microsoft.EntityFrameworkCore.Tools
 Domain
 	-Microsoft.AspNetCore.Identity.EntityFrameworkCore
+	-Microsoft.AspNetCore.Identity
 
 WebAPI
 	-Microsoft.EntityFrameworkCore.Design
