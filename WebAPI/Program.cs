@@ -53,8 +53,10 @@ var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x =>
-    x.AllowAnyHeader()
+    x
+    .AllowAnyHeader()
     .AllowAnyMethod()
+    .AllowCredentials()
     .WithOrigins("http://localhost:3040"));
 
 app.UseAuthentication();
